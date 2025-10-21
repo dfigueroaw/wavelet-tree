@@ -1,0 +1,14 @@
+AccessModifierOffset: -4
+AlignArrayOfStructures: Right
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: true
+BasedOnStyle: Chromium
+BreakBeforeBraces: Linux
+BreakConstructorInitializers: BeforeColon
+ColumnLimit: 100
+FixNamespaceComments: false
+IndentWidth: 4
+NamespaceIndentation: All
+PackConstructorInitializers: Never
+SpaceAfterTemplateKeyword: false
