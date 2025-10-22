@@ -4,18 +4,21 @@
 #include <stddef.h>
 #include "types.h"
 
-typedef struct WaveletTree {
-    u32 low, high;
+typedef struct WaveletTree WaveletTree;
+
+struct WaveletTree {
+    u32 low;
+    u32 high;
     u32* data;
-    struct WaveletTree* left;
-    struct WaveletTree* right;
-} WaveletTree;
+    WaveletTree* left;
+    WaveletTree* right;
+};
 
-void wavelet_tree_from_vec(WaveletTree* wavelet, const u32* restrict vals, size_t n);
-void wavelet_tree_from_string(WaveletTree* wavelet, const char* restrict str);
-void wavelet_tree_free(WaveletTree* wavelet);
+WaveletTree* wavelet_from_vec(const u32* restrict vals, size_t n);
+WaveletTree* wavelet_from_string(const char* restrict str);
+void wavelet_destroy(WaveletTree* wavelet);
 
-u32 wavelet_tree_kth(const WaveletTree* wavelet, u32 l, u32 r, u32 k);
-u32 wavelet_tree_leq(const WaveletTree* wavelet, u32 l, u32 r, u32 k);
+u32 wavelet_kth(const WaveletTree* wavelet, u32 l, u32 r, u32 k);
+u32 wavelet_leq(const WaveletTree* wavelet, u32 l, u32 r, u32 k);
 
 #endif
