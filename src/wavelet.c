@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-void wavelet_tree_from_vec(WaveletTree* self, const u32* restrict vals, const size_t n)
+void wavelet_tree_from_vec(WaveletTree* wavelet, const u32* restrict vals, const size_t n)
 {
-    self->left = NULL;
-    self->right = NULL;
+    wavelet->left = NULL;
+    wavelet->right = NULL;
 
     u32 max = 0;
     u32 min = UINT32_MAX;
@@ -15,15 +15,15 @@ void wavelet_tree_from_vec(WaveletTree* self, const u32* restrict vals, const si
         if (min > vals[i]) min = vals[i];
     }
 
-    self->low = min;
-    self->high = max;
-    self->data = calloc(n + 1, sizeof(*self->data));
+    wavelet->low = min;
+    wavelet->high = max;
+    wavelet->data = calloc(n + 1, sizeof(*wavelet->data));
 
     if (min == max || n == 0) return;
     u32 mid = (min + max) / 2;
 
     for (size_t i = 0; i < n; ++i) {
-        self->data[i + 1] = self->data[i] + (vals[i] <= mid);
+        wavelet->data[i + 1] = wavelet->data[i] + (vals[i] <= mid);
     }
 
     u32* temp = calloc(n, sizeof(*temp));
@@ -38,16 +38,16 @@ void wavelet_tree_from_vec(WaveletTree* self, const u32* restrict vals, const si
         if (vals[i] > mid) temp[left_cnt + right_cnt++] = vals[i];
     }
 
-    self->left = malloc(sizeof(WaveletTree));
-    wavelet_tree_from_vec(self->left, temp, left_cnt);
+    wavelet->left = malloc(sizeof(WaveletTree));
+    wavelet_tree_from_vec(wavelet->left, temp, left_cnt);
 
-    self->right = malloc(sizeof(WaveletTree));
-    wavelet_tree_from_vec(self->right, temp + left_cnt, right_cnt);
+    wavelet->right = malloc(sizeof(WaveletTree));
+    wavelet_tree_from_vec(wavelet->right, temp + left_cnt, right_cnt);
 
     free(temp);
 }
 
-void wavelet_tree_from_string(WaveletTree* self, const char* restrict str)
+void wavelet_tree_from_string(WaveletTree* wavelet, const char* restrict str)
 {
     size_t n = strlen(str);
     u32* vals = calloc(n, sizeof(*vals));
@@ -56,42 +56,42 @@ void wavelet_tree_from_string(WaveletTree* self, const char* restrict str)
         vals[i] = (u32)str[i];
     }
 
-    wavelet_tree_from_vec(self, vals, n);
+    wavelet_tree_from_vec(wavelet, vals, n);
     free(vals);
 }
 
-void wavelet_tree_free(WaveletTree* self)
+void wavelet_tree_free(WaveletTree* wavelet)
 {
-    if (self == NULL) return;
+    if (wavelet == NULL) return;
 
-    wavelet_tree_free(self->left);
-    wavelet_tree_free(self->right);
+    wavelet_tree_free(wavelet->left);
+    wavelet_tree_free(wavelet->right);
 
-    free(self->data);
-    free(self);
+    free(wavelet->data);
+    free(wavelet);
 }
 
-u32 wavelet_tree_kth(const WaveletTree* self, const u32 l, const u32 r, const u32 k)
+u32 wavelet_tree_kth(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 k)
 {
     if (l > r) return 0;
-    if (self->low == self->high) return self->low;
+    if (wavelet->low == wavelet->high) return wavelet->low;
 
-    u32 inLeft = self->data[r] - self->data[l - 1];
-    u32 lb = self->data[l - 1];
-    u32 rb = self->data[r];
+    u32 inLeft = wavelet->data[r] - wavelet->data[l - 1];
+    u32 lb = wavelet->data[l - 1];
+    u32 rb = wavelet->data[r];
 
-    if (k <= inLeft) return wavelet_tree_kth(self->left, lb + 1, rb, k);
-    return wavelet_tree_kth(self->right, l - lb, r - rb, k - inLeft);
+    if (k <= inLeft) return wavelet_tree_kth(wavelet->left, lb + 1, rb, k);
+    return wavelet_tree_kth(wavelet->right, l - lb, r - rb, k - inLeft);
 }
 
-u32 wavelet_tree_leq(const WaveletTree* self, const u32 l, const u32 r, const u32 k)
+u32 wavelet_tree_leq(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 k)
 {
-    if (l > r || self->low > k) return 0;
-    if (self->high <= k) return r - l + 1;
+    if (l > r || wavelet->low > k) return 0;
+    if (wavelet->high <= k) return r - l + 1;
 
-    u32 lb = self->data[l - 1];
-    u32 rb = self->data[r];
+    u32 lb = wavelet->data[l - 1];
+    u32 rb = wavelet->data[r];
 
-    return wavelet_tree_leq(self->left, lb + 1, rb, k) +
-           wavelet_tree_leq(self->right, l - lb, r - rb, k);
+    return wavelet_tree_leq(wavelet->left, lb + 1, rb, k) +
+           wavelet_tree_leq(wavelet->right, l - lb, r - rb, k);
 }

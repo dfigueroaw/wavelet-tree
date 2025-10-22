@@ -11,11 +11,11 @@ typedef struct WaveletTree {
     struct WaveletTree* right;
 } WaveletTree;
 
-void wavelet_tree_from_vec(WaveletTree* self, const u32* restrict vals, size_t n);
-void wavelet_tree_from_string(WaveletTree* self, const char* restrict str);
-void wavelet_tree_free(WaveletTree* self);
+void wavelet_tree_from_vec(WaveletTree* wavelet, const u32* restrict vals, size_t n);
+void wavelet_tree_from_string(WaveletTree* wavelet, const char* restrict str);
+void wavelet_tree_free(WaveletTree* wavelet);
 
-[[nodiscard]] u32 wavelet_tree_kth(const WaveletTree* self, u32 l, u32 r, u32 k);
-[[nodiscard]] u32 wavelet_tree_leq(const WaveletTree* self, u32 l, u32 r, u32 k);
+u32 wavelet_tree_kth(const WaveletTree* wavelet, u32 l, u32 r, u32 k);
+u32 wavelet_tree_leq(const WaveletTree* wavelet, u32 l, u32 r, u32 k);
 
 #endif
