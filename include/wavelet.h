@@ -1,92 +1,21 @@
-#include <algorithm>
-#include <cstdint>
-#include <iostream>
-#include <string>
-#include <vector>
+#ifndef WAVELET_H
+#define WAVELET_H
 
-class WaveletTree
-{
-    using u32 = std::uint32_t;
+#include <stddef.h>
+#include "types.h"
 
-    u32 lo, hi;
-    WaveletTree *left = nullptr, *right = nullptr;
-    std::vector<u32> data;
+typedef struct WaveletTree {
+    u32 low, high;
+    u32* data;
+    struct WaveletTree* left;
+    struct WaveletTree* right;
+} WaveletTree;
 
-    WaveletTree(u32* const from, u32* const to, const u32 x, const u32 y)
-        : lo(x),
-          hi(y)
-    {
-        if (lo == hi || from >= to) return;
-        u32 mid = (lo + hi) / 2;
+void wavelet_tree_from_vec(WaveletTree* self, const u32* restrict vals, size_t n);
+void wavelet_tree_from_string(WaveletTree* self, const char* restrict str);
+void wavelet_tree_free(WaveletTree* self);
 
-        auto f = [mid](u32 x) { return x <= mid; };
-        data.reserve(to - from + 1);
-        data.push_back(0);
-        for (auto* it = from; it != to; ++it) {
-            data.push_back(data.back() + static_cast<u32>(f(*it)));
-        }
-        auto* pivot = std::stable_partition(from, to, f);
-        left = new WaveletTree(from, pivot, lo, mid);
-        right = new WaveletTree(pivot, to, mid + 1, hi);
-    }
+[[nodiscard]] u32 wavelet_tree_kth(const WaveletTree* self, u32 l, u32 r, u32 k);
+[[nodiscard]] u32 wavelet_tree_leq(const WaveletTree* self, u32 l, u32 r, u32 k);
 
-public:
-    template<typename b_it, typename e_it>
-    WaveletTree(b_it from, e_it to, const u32 x, const u32 y)
-        : lo(x),
-          hi(y)
-    {
-        if (lo == hi || from >= to) return;
-        u32 mid = (lo + hi) / 2;
-
-        auto f = [mid](u32 x) { return x <= mid; };
-        data.reserve(to - from + 1);
-        data.push_back(0);
-        for (auto it = from; it != to; ++it) {
-            data.push_back(data.back() + f(*it));
-        }
-        auto pivot = std::stable_partition(from, to, f);
-        left = new WaveletTree(from, pivot, lo, mid);
-        right = new WaveletTree(pivot, to, mid + 1, hi);
-    }
-
-    [[nodiscard]] static WaveletTree from_string(const std::string& source)
-    {
-        std::vector<u32> vals;
-        vals.resize(vals.size());
-
-        for (std::size_t i = 0; i < source.size(); ++i) {
-            vals[i] = source[i];
-        }
-
-        WaveletTree new_tree(vals.begin(), vals.end(), 0, 1);
-
-        return new_tree;
-    }
-
-    u32 kth(const u32 l, const u32 r, const u32 k)
-    {
-        if (l > r) return 0;
-        if (lo == hi) return lo;
-        u32 inLeft = data[r] - data[l - 1];
-        u32 lb = data[l - 1];
-        u32 rb = data[r];
-        if (k <= inLeft) return left->kth(lb + 1, rb, k);
-        return right->kth(l - lb, r - rb, k - inLeft);
-    }
-
-    u32 leq(const u32 l, const u32 r, const u32 k)
-    {
-        if (l > r || k < lo) return 0;
-        if (hi <= k) return r - l + 1;
-        u32 lb = data[l - 1];
-        u32 rb = data[r];
-        return left->leq(lb + 1, rb, k) + right->leq(l - lb, r - rb, k);
-    }
-
-    ~WaveletTree()
-    {
-        delete left;
-        delete right;
-    }
-};
+#endif
