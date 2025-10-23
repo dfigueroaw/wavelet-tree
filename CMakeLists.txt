@@ -7,7 +7,7 @@ set(CMAKE_C_STANDARD_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_library(wavelet-tree src/main.c src/wavelet.c)
+add_library(wavelet-tree src/wavelet.c)
 target_include_directories(wavelet-tree PUBLIC include)
 
 if(MSVC)
