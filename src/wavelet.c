@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct WaveletTree {
+    u32 low;
+    u32 high;
+    u32* data;
+    WaveletTree* left;
+    WaveletTree* right;
+};
+
 WaveletTree* wavelet_from_vec(const u32* restrict vals, const size_t n)
 {
     u32 max = 0;
