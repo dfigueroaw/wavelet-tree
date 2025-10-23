@@ -16,24 +16,24 @@ void test_wavelet_from_vec(void)
 
     u32 kth = 0;
 
-    kth = wavelet_kth(wavelet, 3, 8, 2);
+    kth = wavelet_kth(wavelet, 2, 7, 2);
     TEST_ASSERT_EQUAL_INT(3, kth);
 
-    kth = wavelet_kth(wavelet, 1, 10, 5);
+    kth = wavelet_kth(wavelet, 0, 9, 5);
     TEST_ASSERT_EQUAL_INT(5, kth);
 
-    kth = wavelet_kth(wavelet, 4, 7, 3);
+    kth = wavelet_kth(wavelet, 3, 6, 3);
     TEST_ASSERT_EQUAL_INT(7, kth);
 
     u32 leq = 0;
 
-    leq = wavelet_leq(wavelet, 3, 8, 5);
+    leq = wavelet_leq(wavelet, 2, 7, 5);
     TEST_ASSERT_EQUAL_INT(2, leq);
 
-    leq = wavelet_leq(wavelet, 1, 10, 7);
+    leq = wavelet_leq(wavelet, 0, 9, 7);
     TEST_ASSERT_EQUAL_INT(7, leq);
 
-    leq = wavelet_leq(wavelet, 4, 7, 9);
+    leq = wavelet_leq(wavelet, 3, 6, 9);
     TEST_ASSERT_EQUAL_INT(4, leq);
 
     wavelet_destroy(wavelet);
@@ -49,24 +49,24 @@ void test_wavelet_from_str(void)
 
     char skth = 0;
 
-    skth = (char)wavelet_kth(str_wavelet, 1, len, 1);
+    skth = (char)wavelet_kth(str_wavelet, 0, len - 1, 1);
     TEST_ASSERT_EQUAL_CHAR('a', skth);
 
-    skth = (char)wavelet_kth(str_wavelet, 1, len, 3);
+    skth = (char)wavelet_kth(str_wavelet, 0, len - 1, 3);
     TEST_ASSERT_EQUAL_CHAR('e', skth);
 
-    skth = (char)wavelet_kth(str_wavelet, 3, 8, 3);
+    skth = (char)wavelet_kth(str_wavelet, 2, 7, 3);
     TEST_ASSERT_EQUAL_CHAR('l', skth);
 
     u32 sleq = 0;
 
-    sleq = wavelet_leq(str_wavelet, 1, len, 'm');
+    sleq = wavelet_leq(str_wavelet, 0, len - 1, 'm');
     TEST_ASSERT_EQUAL_INT(6, sleq);
 
-    sleq = wavelet_leq(str_wavelet, 2, 9, 't');
+    sleq = wavelet_leq(str_wavelet, 1, 8, 't');
     TEST_ASSERT_EQUAL_INT(7, sleq);
 
-    sleq = wavelet_leq(str_wavelet, 1, len, 'a');
+    sleq = wavelet_leq(str_wavelet, 0, len - 1, 'a');
     TEST_ASSERT_EQUAL_INT(1, sleq);
 
     wavelet_destroy(str_wavelet);

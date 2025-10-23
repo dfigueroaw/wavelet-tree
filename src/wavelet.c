@@ -90,11 +90,11 @@ u32 wavelet_kth(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 
     if (l > r) return 0;
     if (wavelet->low == wavelet->high) return wavelet->low;
 
-    u32 inLeft = wavelet->data[r] - wavelet->data[l - 1];
-    u32 lb = wavelet->data[l - 1];
-    u32 rb = wavelet->data[r];
+    u32 inLeft = wavelet->data[r + 1] - wavelet->data[l];
+    u32 lb = wavelet->data[l];
+    u32 rb = wavelet->data[r + 1];
 
-    if (k <= inLeft) return wavelet_kth(wavelet->left, lb + 1, rb, k);
+    if (k <= inLeft) return wavelet_kth(wavelet->left, lb, rb - 1, k);
     return wavelet_kth(wavelet->right, l - lb, r - rb, k - inLeft);
 }
 
@@ -103,9 +103,9 @@ u32 wavelet_leq(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 
     if (l > r || wavelet->low > k) return 0;
     if (wavelet->high <= k) return r - l + 1;
 
-    u32 lb = wavelet->data[l - 1];
-    u32 rb = wavelet->data[r];
+    u32 lb = wavelet->data[l];
+    u32 rb = wavelet->data[r + 1];
 
-    return wavelet_leq(wavelet->left, lb + 1, rb, k) +
+    return wavelet_leq(wavelet->left, lb, rb - 1, k) +
            wavelet_leq(wavelet->right, l - lb, r - rb, k);
 }
