@@ -85,6 +85,17 @@ void wavelet_destroy(WaveletTree* wavelet)
     free(wavelet);
 }
 
+u32 wavelet_at(const WaveletTree* wavelet, size_t i)
+{
+    if (wavelet->low == wavelet->high) return wavelet->low;
+
+    u32 inLeft = wavelet->data[i + 1] - wavelet->data[i];
+    u32 rank = wavelet->data[i + 1];
+
+    if (inLeft) return wavelet_at(wavelet->left, rank - 1);
+    return wavelet_at(wavelet->right, i - rank);
+}
+
 u32 wavelet_kth(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 k)
 {
     if (l > r) return 0;

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <unity.h>
+#include "unity.h"
 #include "unity_internals.h"
 #include "wavelet.h"
 
@@ -36,6 +36,38 @@ void test_wavelet_from_vec(void)
     leq = wavelet_leq(wavelet, 3, 6, 9);
     TEST_ASSERT_EQUAL_INT(4, leq);
 
+    u32 elem = 0;
+
+    elem = wavelet_at(wavelet, 0);
+    TEST_ASSERT_EQUAL_INT(5, elem);
+
+    elem = wavelet_at(wavelet, 1);
+    TEST_ASSERT_EQUAL_INT(1, elem);
+
+    elem = wavelet_at(wavelet, 2);
+    TEST_ASSERT_EQUAL_INT(9, elem);
+
+    elem = wavelet_at(wavelet, 3);
+    TEST_ASSERT_EQUAL_INT(3, elem);
+
+    elem = wavelet_at(wavelet, 4);
+    TEST_ASSERT_EQUAL_INT(7, elem);
+
+    elem = wavelet_at(wavelet, 5);
+    TEST_ASSERT_EQUAL_INT(2, elem);
+
+    elem = wavelet_at(wavelet, 6);
+    TEST_ASSERT_EQUAL_INT(8, elem);
+
+    elem = wavelet_at(wavelet, 7);
+    TEST_ASSERT_EQUAL_INT(6, elem);
+
+    elem = wavelet_at(wavelet, 8);
+    TEST_ASSERT_EQUAL_INT(4, elem);
+
+    elem = wavelet_at(wavelet, 9);
+    TEST_ASSERT_EQUAL_INT(10, elem);
+
     wavelet_destroy(wavelet);
     wavelet = NULL;
 }
@@ -68,6 +100,41 @@ void test_wavelet_from_str(void)
 
     sleq = wavelet_leq(str_wavelet, 0, len - 1, 'a');
     TEST_ASSERT_EQUAL_INT(1, sleq);
+
+    u32 selem = 0;
+
+    selem = (char)wavelet_at(str_wavelet, 0);
+    TEST_ASSERT_EQUAL_CHAR('w', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 1);
+    TEST_ASSERT_EQUAL_CHAR('a', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 2);
+    TEST_ASSERT_EQUAL_CHAR('v', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 3);
+    TEST_ASSERT_EQUAL_CHAR('e', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 4);
+    TEST_ASSERT_EQUAL_CHAR('l', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 5);
+    TEST_ASSERT_EQUAL_CHAR('e', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 6);
+    TEST_ASSERT_EQUAL_CHAR('t', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 7);
+    TEST_ASSERT_EQUAL_CHAR('t', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 8);
+    TEST_ASSERT_EQUAL_CHAR('r', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 9);
+    TEST_ASSERT_EQUAL_CHAR('e', selem);
+
+    selem = (char)wavelet_at(str_wavelet, 10);
+    TEST_ASSERT_EQUAL_CHAR('e', selem);
 
     wavelet_destroy(str_wavelet);
     str_wavelet = NULL;
