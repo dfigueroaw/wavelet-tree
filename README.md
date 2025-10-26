@@ -1,4 +1,4 @@
-# Wavelet Tree
+# Wavelet Tree &middot; [![Tests](https://github.com/dfigueroaw/wavelet-tree/actions/workflows/tests.yml/badge.svg)](https://github.com/dfigueroaw/wavelet-tree/actions/workflows/tests.yml)
 
 Una implementación del Wavelet Tree en C.
 
