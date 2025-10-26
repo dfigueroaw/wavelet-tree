@@ -68,6 +68,38 @@ void test_wavelet_from_vec(void)
     elem = wavelet_at(wavelet, 9);
     TEST_ASSERT_EQUAL_INT(10, elem);
 
+    u32 rank = 0;
+
+    rank = wavelet_rank(wavelet, 0, n - 1, 1);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 0, n - 1, 2);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 0, n - 1, 3);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 0, n - 1, 9);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 0, n - 1, 10);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 0, n - 1, 11);
+    TEST_ASSERT_EQUAL_INT(0, rank);
+
+    rank = wavelet_rank(wavelet, 0, 4, 5);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 0, 4, 9);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
+    rank = wavelet_rank(wavelet, 6, 9, 2);
+    TEST_ASSERT_EQUAL_INT(0, rank);
+
+    rank = wavelet_rank(wavelet, 3, 7, 7);
+    TEST_ASSERT_EQUAL_INT(1, rank);
+
     wavelet_destroy(wavelet);
     wavelet = NULL;
 }
@@ -135,6 +167,32 @@ void test_wavelet_from_str(void)
 
     selem = (char)wavelet_at(str_wavelet, 10);
     TEST_ASSERT_EQUAL_CHAR('e', selem);
+
+    u32 srank = 0;
+
+    srank = wavelet_rank(str_wavelet, 0, len - 1, 'e');
+    TEST_ASSERT_EQUAL_INT(4, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, len - 1, 't');
+    TEST_ASSERT_EQUAL_INT(2, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, len - 1, 'r');
+    TEST_ASSERT_EQUAL_INT(1, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, len - 1, 'w');
+    TEST_ASSERT_EQUAL_INT(1, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, len - 1, 'a');
+    TEST_ASSERT_EQUAL_INT(1, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, len - 1, 's');
+    TEST_ASSERT_EQUAL_INT(0, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, 6, 'e');
+    TEST_ASSERT_EQUAL_INT(2, srank);
+
+    srank = wavelet_rank(str_wavelet, 0, 6, 't');
+    TEST_ASSERT_EQUAL_INT(1, srank);
 
     wavelet_destroy(str_wavelet);
     str_wavelet = NULL;

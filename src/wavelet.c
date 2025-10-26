@@ -88,7 +88,7 @@ WaveletTree* wavelet_from_string(const char* const restrict str)
     return wavelet;
 }
 
-void wavelet_destroy(WaveletTree* const wavelet)
+void wavelet_destroy(WaveletTree* const restrict wavelet)
 {
     if (wavelet == NULL) return;
 
@@ -99,18 +99,32 @@ void wavelet_destroy(WaveletTree* const wavelet)
     free(wavelet);
 }
 
-u32 wavelet_at(const WaveletTree* const wavelet, const size_t i)
+u32 wavelet_at(const WaveletTree* const restrict wavelet, const size_t i)
 {
     if (wavelet->low == wavelet->high) return wavelet->low;
 
     const u32 in_left = wavelet->data[i + 1] - wavelet->data[i];
-    const u32 rank = wavelet->data[i + 1];
+    const u32 rank = wavelet->data[i];
 
-    if (in_left) return wavelet_at(wavelet->left, rank - 1);
+    if (in_left) return wavelet_at(wavelet->left, rank);
     return wavelet_at(wavelet->right, i - rank);
 }
 
-u32 wavelet_kth(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 k)
+u32 wavelet_rank(const WaveletTree* const restrict wavelet, const u32 l, const u32 r, const u32 k)
+{
+    if (l > r) return 0;
+    if (k < wavelet->low || k > wavelet->high) return 0;
+    if (wavelet->low == wavelet->high) return r - l + 1;
+
+    const u32 mid = (wavelet->low + wavelet->high) / 2;
+    const u32 lb = wavelet->data[l];
+    const u32 rb = wavelet->data[r + 1];
+
+    if (k <= mid) return wavelet_rank(wavelet->left, lb, rb - 1, k);
+    return wavelet_rank(wavelet->right, l - lb, r - rb, k);
+}
+
+u32 wavelet_kth(const WaveletTree* const restrict wavelet, const u32 l, const u32 r, const u32 k)
 {
     if (l > r) return 0;
     if (wavelet->low == wavelet->high) return wavelet->low;
@@ -123,7 +137,7 @@ u32 wavelet_kth(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 
     return wavelet_kth(wavelet->right, l - lb, r - rb, k - in_left);
 }
 
-u32 wavelet_leq(const WaveletTree* const wavelet, const u32 l, const u32 r, const u32 k)
+u32 wavelet_leq(const WaveletTree* const restrict wavelet, const u32 l, const u32 r, const u32 k)
 {
     if (l > r || wavelet->low > k) return 0;
     if (wavelet->high <= k) return r - l + 1;
