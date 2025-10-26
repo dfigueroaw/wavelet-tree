@@ -10,7 +10,7 @@ struct WaveletTree {
     WaveletTree* right;
 };
 
-WaveletTree* wavelet_from_vec(const u32* restrict vals, const size_t n)
+WaveletTree* wavelet_from_vec(const u32* const restrict vals, const size_t n)
 {
     u32 max = 0;
     u32 min = UINT32_MAX;
@@ -20,22 +20,34 @@ WaveletTree* wavelet_from_vec(const u32* restrict vals, const size_t n)
         if (min > vals[i]) min = vals[i];
     }
 
-    WaveletTree* wavelet = malloc(sizeof(*wavelet));
-    wavelet->left = NULL;
-    wavelet->right = NULL;
+    WaveletTree* const wavelet = malloc(sizeof(*wavelet));
+    if (wavelet == NULL) return NULL;
 
-    wavelet->low = min;
-    wavelet->high = max;
-    wavelet->data = calloc(n + 1, sizeof(*wavelet->data));
+    *wavelet = (WaveletTree){
+        .left = NULL,
+        .right = NULL,
+        .low = min,
+        .high = max,
+        .data = calloc(n + 1, sizeof(*wavelet->data)),
+    };
+
+    if (wavelet->data == NULL) {
+        free(wavelet);
+        return NULL;
+    }
 
     if (min == max || n == 0) return wavelet;
 
-    u32 mid = (min + max) / 2;
+    const u32 mid = (min + max) / 2;
 
     for (size_t i = 0; i < n; ++i)
         wavelet->data[i + 1] = wavelet->data[i] + (vals[i] <= mid);
 
-    u32* temp = calloc(n, sizeof(*temp));
+    u32* const temp = calloc(n, sizeof(*temp));
+    if (temp == NULL) {
+        wavelet_destroy(wavelet);
+        return NULL;
+    }
 
     size_t left_cnt = 0;
     for (size_t i = 0; i < n; ++i) {
@@ -60,21 +72,23 @@ WaveletTree* wavelet_from_vec(const u32* restrict vals, const size_t n)
     return wavelet;
 }
 
-WaveletTree* wavelet_from_string(const char* restrict str)
+WaveletTree* wavelet_from_string(const char* const restrict str)
 {
-    size_t n = strlen(str);
-    u32* vals = calloc(n, sizeof(*vals));
+    const size_t n = strlen(str);
+
+    u32* const vals = calloc(n, sizeof(*vals));
+    if (vals == NULL) return NULL;
 
     for (size_t i = 0; i < n; ++i)
         vals[i] = (u32)str[i];
 
-    WaveletTree* wavelet = wavelet_from_vec(vals, n);
+    WaveletTree* const wavelet = wavelet_from_vec(vals, n);
     free(vals);
 
     return wavelet;
 }
 
-void wavelet_destroy(WaveletTree* wavelet)
+void wavelet_destroy(WaveletTree* const wavelet)
 {
     if (wavelet == NULL) return;
 
@@ -85,14 +99,14 @@ void wavelet_destroy(WaveletTree* wavelet)
     free(wavelet);
 }
 
-u32 wavelet_at(const WaveletTree* wavelet, size_t i)
+u32 wavelet_at(const WaveletTree* const wavelet, const size_t i)
 {
     if (wavelet->low == wavelet->high) return wavelet->low;
 
-    u32 inLeft = wavelet->data[i + 1] - wavelet->data[i];
-    u32 rank = wavelet->data[i + 1];
+    const u32 in_left = wavelet->data[i + 1] - wavelet->data[i];
+    const u32 rank = wavelet->data[i + 1];
 
-    if (inLeft) return wavelet_at(wavelet->left, rank - 1);
+    if (in_left) return wavelet_at(wavelet->left, rank - 1);
     return wavelet_at(wavelet->right, i - rank);
 }
 
@@ -101,21 +115,21 @@ u32 wavelet_kth(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 
     if (l > r) return 0;
     if (wavelet->low == wavelet->high) return wavelet->low;
 
-    u32 inLeft = wavelet->data[r + 1] - wavelet->data[l];
-    u32 lb = wavelet->data[l];
-    u32 rb = wavelet->data[r + 1];
+    const u32 in_left = wavelet->data[r + 1] - wavelet->data[l];
+    const u32 lb = wavelet->data[l];
+    const u32 rb = wavelet->data[r + 1];
 
-    if (k <= inLeft) return wavelet_kth(wavelet->left, lb, rb - 1, k);
-    return wavelet_kth(wavelet->right, l - lb, r - rb, k - inLeft);
+    if (k <= in_left) return wavelet_kth(wavelet->left, lb, rb - 1, k);
+    return wavelet_kth(wavelet->right, l - lb, r - rb, k - in_left);
 }
 
-u32 wavelet_leq(const WaveletTree* wavelet, const u32 l, const u32 r, const u32 k)
+u32 wavelet_leq(const WaveletTree* const wavelet, const u32 l, const u32 r, const u32 k)
 {
     if (l > r || wavelet->low > k) return 0;
     if (wavelet->high <= k) return r - l + 1;
 
-    u32 lb = wavelet->data[l];
-    u32 rb = wavelet->data[r + 1];
+    const u32 lb = wavelet->data[l];
+    const u32 rb = wavelet->data[r + 1];
 
     return wavelet_leq(wavelet->left, lb, rb - 1, k) +
            wavelet_leq(wavelet->right, l - lb, r - rb, k);
