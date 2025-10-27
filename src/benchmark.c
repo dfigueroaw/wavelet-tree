@@ -10,8 +10,8 @@ typedef void (*BenchFunction)(void *arg, size_t test_count);
 
 static size_t bench_num = 1;
 
-static long double benchmark_ms(const char *const name, void *const arg,
-				const BenchFunction fn, const size_t test_count)
+static void benchmark_ms(const char *const name, void *const arg,
+			 const BenchFunction fn, const size_t test_count)
 {
 	// Determina cuántas veces se repite el benchmark para sacar el promedio
 	static const size_t REPEAT_COUNT = 5;
@@ -40,7 +40,6 @@ static long double benchmark_ms(const char *const name, void *const arg,
 	printf("\rBench %zu [%s]: %.2Lf ms\n", bench_num, name, avg_elapsed_ms);
 
 	++bench_num;
-	return avg_elapsed_ms;
 }
 
 typedef struct BenchCtx {
@@ -48,7 +47,7 @@ typedef struct BenchCtx {
 	size_t data_size;
 } BenchCtx;
 
-static void test_access(void *const arg, const size_t test_count)
+static void bench_access(void *const arg, const size_t test_count)
 {
 	BenchCtx *const ctx = arg;
 
@@ -58,7 +57,7 @@ static void test_access(void *const arg, const size_t test_count)
 		result = wavelet_at(ctx->wavelet, i % ctx->data_size);
 }
 
-static void test_rank(void *const arg, const size_t test_count)
+static void bench_rank(void *const arg, const size_t test_count)
 {
 	BenchCtx *const ctx = arg;
 
@@ -68,7 +67,7 @@ static void test_rank(void *const arg, const size_t test_count)
 		result = wavelet_rank(ctx->wavelet, 0, ctx->data_size, 'e');
 }
 
-static void test_ksmall(void *const arg, const size_t test_count)
+static void bench_ksmall(void *const arg, const size_t test_count)
 {
 	BenchCtx *const ctx = arg;
 
@@ -79,7 +78,7 @@ static void test_ksmall(void *const arg, const size_t test_count)
 					      i % ctx->data_size);
 }
 
-static void test_leq(void *const arg, const size_t test_count)
+static void bench_leq(void *const arg, const size_t test_count)
 {
 	BenchCtx *const ctx = arg;
 
@@ -127,51 +126,51 @@ int main(void)
 	printf("\n");
 
 	printf("Access:\n");
-	benchmark_ms("access(str_1) - 1e6", &ctx_1, test_access, 1000000);
-	benchmark_ms("access(str_2) - 1e6", &ctx_2, test_access, 1000000);
-	benchmark_ms("access(str_3) - 1e6", &ctx_3, test_access, 1000000);
-	benchmark_ms("access(str_1) - 1e7", &ctx_1, test_access, 10000000);
-	benchmark_ms("access(str_2) - 1e7", &ctx_2, test_access, 10000000);
-	benchmark_ms("access(str_3) - 1e7", &ctx_3, test_access, 10000000);
-	benchmark_ms("access(str_1) - 1e8", &ctx_1, test_access, 100000000);
-	benchmark_ms("access(str_2) - 1e8", &ctx_2, test_access, 100000000);
-	benchmark_ms("access(str_3) - 1e8", &ctx_3, test_access, 100000000);
+	benchmark_ms("access(str_1) - 1e6", &ctx_1, bench_access, 1000000);
+	benchmark_ms("access(str_2) - 1e6", &ctx_2, bench_access, 1000000);
+	benchmark_ms("access(str_3) - 1e6", &ctx_3, bench_access, 1000000);
+	benchmark_ms("access(str_1) - 1e7", &ctx_1, bench_access, 10000000);
+	benchmark_ms("access(str_2) - 1e7", &ctx_2, bench_access, 10000000);
+	benchmark_ms("access(str_3) - 1e7", &ctx_3, bench_access, 10000000);
+	benchmark_ms("access(str_1) - 1e8", &ctx_1, bench_access, 100000000);
+	benchmark_ms("access(str_2) - 1e8", &ctx_2, bench_access, 100000000);
+	benchmark_ms("access(str_3) - 1e8", &ctx_3, bench_access, 100000000);
 	printf("\n");
 
 	printf("Rank:\n");
-	benchmark_ms("rank(str_1) - 1e6", &ctx_1, test_rank, 1000000);
-	benchmark_ms("rank(str_2) - 1e6", &ctx_2, test_rank, 1000000);
-	benchmark_ms("rank(str_3) - 1e6", &ctx_3, test_rank, 1000000);
-	benchmark_ms("rank(str_1) - 1e7", &ctx_1, test_rank, 10000000);
-	benchmark_ms("rank(str_2) - 1e7", &ctx_2, test_rank, 10000000);
-	benchmark_ms("rank(str_3) - 1e7", &ctx_3, test_rank, 10000000);
-	benchmark_ms("rank(str_1) - 1e8", &ctx_1, test_rank, 100000000);
-	benchmark_ms("rank(str_2) - 1e8", &ctx_2, test_rank, 100000000);
-	benchmark_ms("rank(str_3) - 1e8", &ctx_3, test_rank, 100000000);
+	benchmark_ms("rank(str_1) - 1e6", &ctx_1, bench_rank, 1000000);
+	benchmark_ms("rank(str_2) - 1e6", &ctx_2, bench_rank, 1000000);
+	benchmark_ms("rank(str_3) - 1e6", &ctx_3, bench_rank, 1000000);
+	benchmark_ms("rank(str_1) - 1e7", &ctx_1, bench_rank, 10000000);
+	benchmark_ms("rank(str_2) - 1e7", &ctx_2, bench_rank, 10000000);
+	benchmark_ms("rank(str_3) - 1e7", &ctx_3, bench_rank, 10000000);
+	benchmark_ms("rank(str_1) - 1e8", &ctx_1, bench_rank, 100000000);
+	benchmark_ms("rank(str_2) - 1e8", &ctx_2, bench_rank, 100000000);
+	benchmark_ms("rank(str_3) - 1e8", &ctx_3, bench_rank, 100000000);
 	printf("\n");
 
 	printf("Kth-smallest:\n");
-	benchmark_ms("ksmall(str_1) - 1e6", &ctx_1, test_ksmall, 1000000);
-	benchmark_ms("ksmall(str_2) - 1e6", &ctx_2, test_ksmall, 1000000);
-	benchmark_ms("ksmall(str_3) - 1e6", &ctx_3, test_ksmall, 1000000);
-	benchmark_ms("ksmall(str_1) - 1e7", &ctx_1, test_ksmall, 10000000);
-	benchmark_ms("ksmall(str_2) - 1e7", &ctx_2, test_ksmall, 10000000);
-	benchmark_ms("ksmall(str_3) - 1e7", &ctx_3, test_ksmall, 10000000);
-	benchmark_ms("ksmall(str_1) - 1e8", &ctx_1, test_ksmall, 100000000);
-	benchmark_ms("ksmall(str_2) - 1e8", &ctx_2, test_ksmall, 100000000);
-	benchmark_ms("ksmall(str_3) - 1e8", &ctx_3, test_ksmall, 100000000);
+	benchmark_ms("ksmall(str_1) - 1e6", &ctx_1, bench_ksmall, 1000000);
+	benchmark_ms("ksmall(str_2) - 1e6", &ctx_2, bench_ksmall, 1000000);
+	benchmark_ms("ksmall(str_3) - 1e6", &ctx_3, bench_ksmall, 1000000);
+	benchmark_ms("ksmall(str_1) - 1e7", &ctx_1, bench_ksmall, 10000000);
+	benchmark_ms("ksmall(str_2) - 1e7", &ctx_2, bench_ksmall, 10000000);
+	benchmark_ms("ksmall(str_3) - 1e7", &ctx_3, bench_ksmall, 10000000);
+	benchmark_ms("ksmall(str_1) - 1e8", &ctx_1, bench_ksmall, 100000000);
+	benchmark_ms("ksmall(str_2) - 1e8", &ctx_2, bench_ksmall, 100000000);
+	benchmark_ms("ksmall(str_3) - 1e8", &ctx_3, bench_ksmall, 100000000);
 	printf("\n");
 
 	printf("Leq:\n");
-	benchmark_ms("leq(str_1) - 1e6", &ctx_1, test_leq, 1000000);
-	benchmark_ms("leq(str_2) - 1e6", &ctx_2, test_leq, 1000000);
-	benchmark_ms("leq(str_3) - 1e6", &ctx_3, test_leq, 1000000);
-	benchmark_ms("leq(str_1) - 1e7", &ctx_1, test_leq, 10000000);
-	benchmark_ms("leq(str_2) - 1e7", &ctx_2, test_leq, 10000000);
-	benchmark_ms("leq(str_3) - 1e7", &ctx_3, test_leq, 10000000);
-	benchmark_ms("leq(str_1) - 1e8", &ctx_1, test_leq, 100000000);
-	benchmark_ms("leq(str_2) - 1e8", &ctx_2, test_leq, 100000000);
-	benchmark_ms("leq(str_3) - 1e8", &ctx_3, test_leq, 100000000);
+	benchmark_ms("leq(str_1) - 1e6", &ctx_1, bench_leq, 1000000);
+	benchmark_ms("leq(str_2) - 1e6", &ctx_2, bench_leq, 1000000);
+	benchmark_ms("leq(str_3) - 1e6", &ctx_3, bench_leq, 1000000);
+	benchmark_ms("leq(str_1) - 1e7", &ctx_1, bench_leq, 10000000);
+	benchmark_ms("leq(str_2) - 1e7", &ctx_2, bench_leq, 10000000);
+	benchmark_ms("leq(str_3) - 1e7", &ctx_3, bench_leq, 10000000);
+	benchmark_ms("leq(str_1) - 1e8", &ctx_1, bench_leq, 100000000);
+	benchmark_ms("leq(str_2) - 1e8", &ctx_2, bench_leq, 100000000);
+	benchmark_ms("leq(str_3) - 1e8", &ctx_3, bench_leq, 100000000);
 	printf("\n");
 
 	wavelet_destroy(ctx_1.wavelet);
