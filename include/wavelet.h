@@ -16,7 +16,7 @@ u32 wavelet_at(const WaveletTree* restrict wavelet, size_t i);
 
 u32 wavelet_rank(const WaveletTree* restrict wavelet, u32 l, u32 r, u32 k);
 
-u32 wavelet_kth(const WaveletTree* restrict wavelet, u32 l, u32 r, u32 k);
+u32 wavelet_kth_smallest(const WaveletTree* restrict wavelet, u32 l, u32 r, u32 k);
 
 u32 wavelet_leq(const WaveletTree* restrict wavelet, u32 l, u32 r, u32 k);
 

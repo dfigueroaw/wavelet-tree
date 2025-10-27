@@ -124,7 +124,10 @@ u32 wavelet_rank(const WaveletTree* const restrict wavelet, const u32 l, const u
     return wavelet_rank(wavelet->right, l - lb, r - rb, k);
 }
 
-u32 wavelet_kth(const WaveletTree* const restrict wavelet, const u32 l, const u32 r, const u32 k)
+u32 wavelet_kth_smallest(const WaveletTree* const restrict wavelet,
+                         const u32 l,
+                         const u32 r,
+                         const u32 k)
 {
     if (l > r) return 0;
     if (wavelet->low == wavelet->high) return wavelet->low;
@@ -133,8 +136,8 @@ u32 wavelet_kth(const WaveletTree* const restrict wavelet, const u32 l, const u3
     const u32 lb = wavelet->data[l];
     const u32 rb = wavelet->data[r + 1];
 
-    if (k <= in_left) return wavelet_kth(wavelet->left, lb, rb - 1, k);
-    return wavelet_kth(wavelet->right, l - lb, r - rb, k - in_left);
+    if (k <= in_left) return wavelet_kth_smallest(wavelet->left, lb, rb - 1, k);
+    return wavelet_kth_smallest(wavelet->right, l - lb, r - rb, k - in_left);
 }
 
 u32 wavelet_leq(const WaveletTree* const restrict wavelet, const u32 l, const u32 r, const u32 k)

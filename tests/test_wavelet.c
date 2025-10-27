@@ -14,9 +14,9 @@ void test_wavelet_from_vec(void)
 
     WaveletTree* wavelet = wavelet_from_vec(vals, n);
 
-    TEST_ASSERT_EQUAL_INT(3, wavelet_kth(wavelet, 2, 7, 2));
-    TEST_ASSERT_EQUAL_INT(5, wavelet_kth(wavelet, 0, 9, 5));
-    TEST_ASSERT_EQUAL_INT(7, wavelet_kth(wavelet, 3, 6, 3));
+    TEST_ASSERT_EQUAL_INT(3, wavelet_kth_smallest(wavelet, 2, 7, 2));
+    TEST_ASSERT_EQUAL_INT(5, wavelet_kth_smallest(wavelet, 0, 9, 5));
+    TEST_ASSERT_EQUAL_INT(7, wavelet_kth_smallest(wavelet, 3, 6, 3));
 
     TEST_ASSERT_EQUAL_INT(2, wavelet_leq(wavelet, 2, 7, 5));
     TEST_ASSERT_EQUAL_INT(7, wavelet_leq(wavelet, 0, 9, 7));
@@ -55,9 +55,9 @@ void test_wavelet_from_str(void)
 
     WaveletTree* str_wavelet = wavelet_from_string(str);
 
-    TEST_ASSERT_EQUAL_CHAR('a', (char)wavelet_kth(str_wavelet, 0, len - 1, 1));
-    TEST_ASSERT_EQUAL_CHAR('e', (char)wavelet_kth(str_wavelet, 0, len - 1, 3));
-    TEST_ASSERT_EQUAL_CHAR('l', (char)wavelet_kth(str_wavelet, 2, 7, 3));
+    TEST_ASSERT_EQUAL_CHAR('a', (char)wavelet_kth_smallest(str_wavelet, 0, len - 1, 1));
+    TEST_ASSERT_EQUAL_CHAR('e', (char)wavelet_kth_smallest(str_wavelet, 0, len - 1, 3));
+    TEST_ASSERT_EQUAL_CHAR('l', (char)wavelet_kth_smallest(str_wavelet, 2, 7, 3));
 
     TEST_ASSERT_EQUAL_INT(6, wavelet_leq(str_wavelet, 0, len - 1, 'm'));
     TEST_ASSERT_EQUAL_INT(7, wavelet_leq(str_wavelet, 1, 8, 't'));
