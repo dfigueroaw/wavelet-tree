@@ -16,10 +16,14 @@ target_compile_options(wavelet-tree PUBLIC
     $<$<BOOL:${GCC_LIKE}>:-Wextra>
     $<$<BOOL:${GCC_LIKE}>:-Wpedantic>
     $<$<BOOL:${GCC_LIKE}>:-Wconversion>
+    $<$<BOOL:${GCC_LIKE}>:-O0>
     $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 
 add_executable(wavelet-benchmark src/benchmark.c)
 target_link_libraries(wavelet-benchmark PRIVATE wavelet-tree)
+
+add_executable(wavelet-entropy src/entropy.c)
+target_link_libraries(wavelet-entropy PRIVATE wavelet-tree)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
