@@ -13,8 +13,8 @@ void tearDown(void)
 
 void test_wavelet_from_vec(void)
 {
-	u32 vals[] = { 5, 1, 9, 3, 7, 2, 8, 6, 4, 10 };
-	size_t n = sizeof(vals) / sizeof(*vals);
+	const u32 vals[] = { 5, 1, 9, 3, 7, 2, 8, 6, 4, 10 };
+	const size_t n = sizeof(vals) / sizeof(*vals);
 
 	WaveletTree *wavelet = wavelet_from_vec(vals, n);
 
@@ -54,7 +54,7 @@ void test_wavelet_from_vec(void)
 
 void test_wavelet_from_str(void)
 {
-	const char *str = "wavelettree";
+	const char *const restrict str = "wavelettree";
 	const size_t len = strlen(str);
 
 	WaveletTree *str_wavelet = wavelet_from_string(str);

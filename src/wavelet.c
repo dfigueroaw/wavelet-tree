@@ -23,7 +23,7 @@ WaveletTree *wavelet_from_vec(const u32 *const restrict vals, const size_t n)
 			min = vals[i];
 	}
 
-	WaveletTree *const wavelet = malloc(sizeof(*wavelet));
+	WaveletTree *const restrict wavelet = malloc(sizeof(*wavelet));
 	if (wavelet == NULL)
 		return NULL;
 
@@ -48,7 +48,7 @@ WaveletTree *wavelet_from_vec(const u32 *const restrict vals, const size_t n)
 	for (size_t i = 0; i < n; ++i)
 		wavelet->data[i + 1] = wavelet->data[i] + (vals[i] <= mid);
 
-	u32 *const temp = calloc(n, sizeof(*temp));
+	u32 *const restrict temp = calloc(n, sizeof(*temp));
 	if (temp == NULL) {
 		wavelet_destroy(wavelet);
 		return NULL;
@@ -81,7 +81,7 @@ WaveletTree *wavelet_from_string(const char *const restrict str)
 {
 	const size_t n = strlen(str);
 
-	u32 *const vals = calloc(n, sizeof(*vals));
+	u32 *const restrict vals = calloc(n, sizeof(*vals));
 
 	if (vals == NULL)
 		return NULL;
