@@ -69,6 +69,8 @@ int main(void)
 
 	WaveletTree *wavelet = wavelet_from_string(selected_str);
 
+	printf("la entropía de este string es: %f\n", wavelet_entropy(wavelet));
+
 	wavelet_destroy(wavelet);
 	wavelet = NULL;
 
