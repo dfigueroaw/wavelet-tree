@@ -21,4 +21,6 @@ u32 wavelet_kth_smallest(const WaveletTree *restrict wavelet, u32 l, u32 r,
 
 u32 wavelet_leq(const WaveletTree *restrict wavelet, u32 l, u32 r, u32 k);
 
+double wavelet_entropy(const WaveletTree *restrict wavelet);
+
 #endif

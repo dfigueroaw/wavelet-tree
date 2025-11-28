@@ -1,4 +1,5 @@
 #include "wavelet.h"
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -6,6 +7,7 @@ struct WaveletTree {
 	u32 low;
 	u32 high;
 	u32 *data;
+	u32 length;
 	WaveletTree *left;
 	WaveletTree *right;
 };
@@ -32,6 +34,7 @@ WaveletTree *wavelet_from_vec(const u32 *const restrict vals, const size_t n)
 		.right = NULL,
 		.low = min,
 		.high = max,
+		.length = n,
 		.data = calloc(n + 1, sizeof(*wavelet->data)),
 	};
 
@@ -177,4 +180,20 @@ u32 wavelet_leq(const WaveletTree *const restrict wavelet, const u32 l,
 
 	return wavelet_leq(wavelet->left, lb, rb - 1, k) +
 	       wavelet_leq(wavelet->right, l - lb, r - rb, k);
+}
+
+static double wavelet_entropy_rec(const WaveletTree *const restrict wavelet,
+				  const size_t length)
+{
+	if (wavelet->low != wavelet->high)
+		return wavelet_entropy_rec(wavelet->left, length) +
+		       wavelet_entropy_rec(wavelet->right, length);
+
+	double p = (double)wavelet->length / (double)length;
+	return -p * log2(p);
+}
+
+double wavelet_entropy(const WaveletTree *const restrict wavelet)
+{
+	return wavelet_entropy_rec(wavelet, wavelet->length);
 }
