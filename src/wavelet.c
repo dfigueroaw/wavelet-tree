@@ -74,7 +74,7 @@ WaveletTree *wavelet_from_vec(const u32 *const restrict vals, const size_t n)
 	}
 
 	wavelet->left = wavelet_from_vec(temp, left_cnt);
-	wavelet->right = wavelet_from_vec(temp + left_cnt, right_cnt);
+	wavelet->right = wavelet_from_vec(&temp[left_cnt], right_cnt);
 
 	free(temp);
 	return wavelet;
