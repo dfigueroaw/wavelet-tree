@@ -29,3 +29,11 @@ siguiente ejecutable:
 ```bash
 build/wavelet-benchmark
 ```
+
+## Aplicación
+
+Puedes ejecutar la aplicación del wavelet de forma similar al benchmark:
+
+```bash
+build/wavelet-entropy
+```
