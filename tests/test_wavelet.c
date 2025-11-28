@@ -48,6 +48,8 @@ void test_wavelet_from_vec(void)
 	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(wavelet, 6, 9, 2));
 	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 3, 7, 7));
 
+	TEST_ASSERT_EQUAL_FLOAT(3.32193, wavelet_entropy(wavelet));
+
 	wavelet_destroy(wavelet);
 	wavelet = NULL;
 }
@@ -90,6 +92,8 @@ void test_wavelet_from_str(void)
 	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(str_wavelet, 0, len - 1, 's'));
 	TEST_ASSERT_EQUAL_INT(2, wavelet_rank(str_wavelet, 0, 6, 'e'));
 	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, 6, 't'));
+
+	TEST_ASSERT_EQUAL_FLOAT(2.55034, wavelet_entropy(str_wavelet));
 
 	wavelet_destroy(str_wavelet);
 	str_wavelet = NULL;
