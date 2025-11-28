@@ -36,7 +36,10 @@ int main(void)
 
 	do {
 		printf("> ");
-		scanf("%i", &choice);
+		if (scanf("%i", &choice) == 0) {
+			puts("error inesperado al leer selección");
+			return 1;
+		}
 	} while (choice < 1 || choice > 4);
 
 	printf("\n");
@@ -56,12 +59,15 @@ int main(void)
 	case 4:
 		printf("Escribe el string:\n");
 		printf("> ");
-		scanf("%s", buf);
+		if (scanf("%s", buf) == 0) {
+			puts("error inesperado al leer string");
+			return 1;
+		};
 		selected_str = buf;
 		break;
 	default:
 		// Unreachable
-		printf("Selección incorrecta.\n");
+		puts("Selección incorrecta.");
 		return 1;
 	}
 
