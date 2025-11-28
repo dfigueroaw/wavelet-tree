@@ -2,12 +2,14 @@
   pkgs ? import <nixpkgs> { },
 }:
 pkgs.mkShell {
-  packages = [
-    (pkgs.python3.withPackages (
+  packages = with pkgs; [
+    (python3.withPackages (
       ps: with ps; [
         matplotlib
         numpy
       ]
     ))
+    cmake
+    gcc
   ];
 }
