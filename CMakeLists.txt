@@ -17,7 +17,6 @@ target_compile_options(wavelet-tree PUBLIC
     $<$<BOOL:${GCC_LIKE}>:-Wextra>
     $<$<BOOL:${GCC_LIKE}>:-Wpedantic>
     $<$<BOOL:${GCC_LIKE}>:-Wconversion>
-    $<$<BOOL:${GCC_LIKE}>:-O0>
     $<$<CXX_COMPILER_ID:MSVC>:/W4>)
 
 add_executable(wavelet-benchmark src/benchmark.c)
