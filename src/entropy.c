@@ -75,7 +75,23 @@ int main(void)
 
 	WaveletTree *wavelet = wavelet_from_string(selected_str);
 
-	printf("la entropía de este string es: %f\n", wavelet_entropy(wavelet));
+	size_t l = 0;
+	size_t r = 0;
+
+	while (1) {
+		printf("Seleccione un rango\n");
+		printf("> ");
+		if (scanf("%zu %zu", &l, &r) == 0) {
+			puts("error inesperado al leer rango");
+			return 1;
+		}
+
+		if (l == 0 && r == 0)
+			break;
+
+		printf("la entropía de este string en el rango [%zu,%zu) es: %f\n",
+		       l, r, wavelet_entropy(wavelet, l, r));
+	}
 
 	wavelet_destroy(wavelet);
 	wavelet = NULL;
