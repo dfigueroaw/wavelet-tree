@@ -182,18 +182,27 @@ u32 wavelet_leq(const WaveletTree *const restrict wavelet, const u32 l,
 	       wavelet_leq(wavelet->right, l - lb, r - rb, k);
 }
 
-static double wavelet_entropy_rec(const WaveletTree *const restrict wavelet,
-				  const size_t length)
+static double wavelet_entropy_rec(const WaveletTree *const root,
+				  const WaveletTree *const wavelet,
+				  const size_t l, const size_t r)
 {
 	if (wavelet->low != wavelet->high)
-		return wavelet_entropy_rec(wavelet->left, length) +
-		       wavelet_entropy_rec(wavelet->right, length);
+		return wavelet_entropy_rec(root, wavelet->left, l, r) +
+		       wavelet_entropy_rec(root, wavelet->right, l, r);
 
-	double p = (double)wavelet->length / (double)length;
+	const u32 length = wavelet_rank(root, l, r, wavelet->low);
+	if (length == 0)
+		return 0.0;
+
+	double p = (double)length / (double)(r - l);
 	return -p * log2(p);
 }
 
-double wavelet_entropy(const WaveletTree *const restrict wavelet)
+double wavelet_entropy(const WaveletTree *const restrict wavelet,
+		       const size_t l, const size_t r)
 {
-	return wavelet_entropy_rec(wavelet, wavelet->length);
+	if (l >= r)
+		return 0.0;
+
+	return wavelet_entropy_rec(wavelet, wavelet, l, r);
 }
