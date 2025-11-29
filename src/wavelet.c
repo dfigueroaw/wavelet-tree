@@ -98,7 +98,7 @@ WaveletTree *wavelet_from_string(const char *const restrict str)
 	return wavelet;
 }
 
-void wavelet_destroy(WaveletTree *const restrict wavelet)
+void wavelet_destroy(WaveletTree *const wavelet)
 {
 	if (wavelet == NULL)
 		return;
@@ -110,7 +110,7 @@ void wavelet_destroy(WaveletTree *const restrict wavelet)
 	free(wavelet);
 }
 
-u32 wavelet_at(const WaveletTree *const restrict wavelet, const size_t i)
+u32 wavelet_at(const WaveletTree *const wavelet, const size_t i)
 {
 	if (wavelet->low == wavelet->high)
 		return wavelet->low;
@@ -124,8 +124,8 @@ u32 wavelet_at(const WaveletTree *const restrict wavelet, const size_t i)
 	return wavelet_at(wavelet->right, i - rank);
 }
 
-u32 wavelet_rank(const WaveletTree *const restrict wavelet, const u32 l,
-		 const u32 r, const u32 k)
+u32 wavelet_rank(const WaveletTree *const wavelet, const size_t l,
+		 const size_t r, const u32 k)
 {
 	if (l > r)
 		return 0;
@@ -146,8 +146,8 @@ u32 wavelet_rank(const WaveletTree *const restrict wavelet, const u32 l,
 	return wavelet_rank(wavelet->right, l - lb, r - rb, k);
 }
 
-u32 wavelet_kth_smallest(const WaveletTree *const restrict wavelet, const u32 l,
-			 const u32 r, const u32 k)
+u32 wavelet_kth_smallest(const WaveletTree *const wavelet, const size_t l,
+			 const size_t r, const u32 k)
 {
 	if (l > r)
 		return 0;
@@ -166,8 +166,8 @@ u32 wavelet_kth_smallest(const WaveletTree *const restrict wavelet, const u32 l,
 				    k - in_left);
 }
 
-u32 wavelet_leq(const WaveletTree *const restrict wavelet, const u32 l,
-		const u32 r, const u32 k)
+u32 wavelet_leq(const WaveletTree *const wavelet, const size_t l,
+		const size_t r, const u32 k)
 {
 	if (l > r || wavelet->low > k)
 		return 0;
