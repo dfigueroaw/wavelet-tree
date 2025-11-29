@@ -7,7 +7,6 @@ struct WaveletTree {
 	u32 low;
 	u32 high;
 	u32 *data;
-	u32 length;
 	WaveletTree *left;
 	WaveletTree *right;
 };
@@ -34,7 +33,6 @@ WaveletTree *wavelet_from_vec(const u32 *const restrict vals, const size_t n)
 		.right = NULL,
 		.low = min,
 		.high = max,
-		.length = n,
 		.data = calloc(n + 1, sizeof(*wavelet->data)),
 	};
 
