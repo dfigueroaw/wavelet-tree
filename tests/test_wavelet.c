@@ -18,13 +18,13 @@ void test_wavelet_from_vec(void)
 
 	WaveletTree *wavelet = wavelet_from_vec(vals, n);
 
-	TEST_ASSERT_EQUAL_INT(3, wavelet_kth_smallest(wavelet, 2, 7, 2));
-	TEST_ASSERT_EQUAL_INT(5, wavelet_kth_smallest(wavelet, 0, 9, 5));
-	TEST_ASSERT_EQUAL_INT(7, wavelet_kth_smallest(wavelet, 3, 6, 3));
+	TEST_ASSERT_EQUAL_INT(3, wavelet_kth_smallest(wavelet, 2, 8, 2));
+	TEST_ASSERT_EQUAL_INT(5, wavelet_kth_smallest(wavelet, 0, 10, 5));
+	TEST_ASSERT_EQUAL_INT(7, wavelet_kth_smallest(wavelet, 3, 7, 3));
 
-	TEST_ASSERT_EQUAL_INT(2, wavelet_leq(wavelet, 2, 7, 5));
-	TEST_ASSERT_EQUAL_INT(7, wavelet_leq(wavelet, 0, 9, 7));
-	TEST_ASSERT_EQUAL_INT(4, wavelet_leq(wavelet, 3, 6, 9));
+	TEST_ASSERT_EQUAL_INT(2, wavelet_leq(wavelet, 2, 8, 5));
+	TEST_ASSERT_EQUAL_INT(7, wavelet_leq(wavelet, 0, 10, 7));
+	TEST_ASSERT_EQUAL_INT(4, wavelet_leq(wavelet, 3, 7, 9));
 
 	TEST_ASSERT_EQUAL_INT(5, wavelet_at(wavelet, 0));
 	TEST_ASSERT_EQUAL_INT(1, wavelet_at(wavelet, 1));
@@ -37,16 +37,16 @@ void test_wavelet_from_vec(void)
 	TEST_ASSERT_EQUAL_INT(4, wavelet_at(wavelet, 8));
 	TEST_ASSERT_EQUAL_INT(10, wavelet_at(wavelet, 9));
 
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n - 1, 1));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n - 1, 2));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n - 1, 3));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n - 1, 9));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n - 1, 10));
-	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(wavelet, 0, n - 1, 11));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, 4, 5));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, 4, 9));
-	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(wavelet, 6, 9, 2));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 3, 7, 7));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n, 1));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n, 2));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n, 3));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n, 9));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, n, 10));
+	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(wavelet, 0, n, 11));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, 5, 5));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 0, 5, 9));
+	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(wavelet, 6, 10, 2));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(wavelet, 3, 8, 7));
 
 	TEST_ASSERT_EQUAL_FLOAT(3.321928, wavelet_entropy(wavelet, 0, n));
 
@@ -62,15 +62,15 @@ void test_wavelet_from_str(void)
 	WaveletTree *str_wavelet = wavelet_from_string(str);
 
 	TEST_ASSERT_EQUAL_CHAR('a', (char)wavelet_kth_smallest(str_wavelet, 0,
-							       len - 1, 1));
+							       len, 1));
 	TEST_ASSERT_EQUAL_CHAR('e', (char)wavelet_kth_smallest(str_wavelet, 0,
-							       len - 1, 3));
+							       len, 3));
 	TEST_ASSERT_EQUAL_CHAR('l', (char)wavelet_kth_smallest(str_wavelet, 2,
-							       7, 3));
+							       8, 3));
 
-	TEST_ASSERT_EQUAL_INT(6, wavelet_leq(str_wavelet, 0, len - 1, 'm'));
-	TEST_ASSERT_EQUAL_INT(7, wavelet_leq(str_wavelet, 1, 8, 't'));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_leq(str_wavelet, 0, len - 1, 'a'));
+	TEST_ASSERT_EQUAL_INT(6, wavelet_leq(str_wavelet, 0, len, 'm'));
+	TEST_ASSERT_EQUAL_INT(7, wavelet_leq(str_wavelet, 1, 9, 't'));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_leq(str_wavelet, 0, len, 'a'));
 
 	TEST_ASSERT_EQUAL_CHAR('w', (char)wavelet_at(str_wavelet, 0));
 	TEST_ASSERT_EQUAL_CHAR('a', (char)wavelet_at(str_wavelet, 1));
@@ -84,14 +84,14 @@ void test_wavelet_from_str(void)
 	TEST_ASSERT_EQUAL_CHAR('e', (char)wavelet_at(str_wavelet, 9));
 	TEST_ASSERT_EQUAL_CHAR('e', (char)wavelet_at(str_wavelet, 10));
 
-	TEST_ASSERT_EQUAL_INT(4, wavelet_rank(str_wavelet, 0, len - 1, 'e'));
-	TEST_ASSERT_EQUAL_INT(2, wavelet_rank(str_wavelet, 0, len - 1, 't'));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, len - 1, 'r'));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, len - 1, 'w'));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, len - 1, 'a'));
-	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(str_wavelet, 0, len - 1, 's'));
-	TEST_ASSERT_EQUAL_INT(2, wavelet_rank(str_wavelet, 0, 6, 'e'));
-	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, 6, 't'));
+	TEST_ASSERT_EQUAL_INT(4, wavelet_rank(str_wavelet, 0, len, 'e'));
+	TEST_ASSERT_EQUAL_INT(2, wavelet_rank(str_wavelet, 0, len, 't'));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, len, 'r'));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, len, 'w'));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, len, 'a'));
+	TEST_ASSERT_EQUAL_INT(0, wavelet_rank(str_wavelet, 0, len, 's'));
+	TEST_ASSERT_EQUAL_INT(2, wavelet_rank(str_wavelet, 0, 7, 'e'));
+	TEST_ASSERT_EQUAL_INT(1, wavelet_rank(str_wavelet, 0, 7, 't'));
 
 	TEST_ASSERT_EQUAL_FLOAT(2.550341, wavelet_entropy(str_wavelet, 0, len));
 

@@ -125,21 +125,21 @@ u32 wavelet_at(const WaveletTree *const wavelet, const size_t i)
 u32 wavelet_rank(const WaveletTree *const wavelet, const size_t l,
 		 const size_t r, const u32 k)
 {
-	if (l > r)
+	if (l >= r)
 		return 0;
 
 	if (k < wavelet->low || k > wavelet->high)
 		return 0;
 
 	if (wavelet->low == wavelet->high)
-		return r - l + 1;
+		return r - l;
 
 	const u32 mid = (wavelet->low + wavelet->high) / 2;
 	const u32 lb = wavelet->data[l];
-	const u32 rb = wavelet->data[r + 1];
+	const u32 rb = wavelet->data[r];
 
 	if (k <= mid)
-		return wavelet_rank(wavelet->left, lb, rb - 1, k);
+		return wavelet_rank(wavelet->left, lb, rb, k);
 
 	return wavelet_rank(wavelet->right, l - lb, r - rb, k);
 }
@@ -147,18 +147,18 @@ u32 wavelet_rank(const WaveletTree *const wavelet, const size_t l,
 u32 wavelet_kth_smallest(const WaveletTree *const wavelet, const size_t l,
 			 const size_t r, const u32 k)
 {
-	if (l > r)
+	if (l >= r)
 		return 0;
 
 	if (wavelet->low == wavelet->high)
 		return wavelet->low;
 
-	const u32 in_left = wavelet->data[r + 1] - wavelet->data[l];
+	const u32 in_left = wavelet->data[r] - wavelet->data[l];
 	const u32 lb = wavelet->data[l];
-	const u32 rb = wavelet->data[r + 1];
+	const u32 rb = wavelet->data[r];
 
 	if (k <= in_left)
-		return wavelet_kth_smallest(wavelet->left, lb, rb - 1, k);
+		return wavelet_kth_smallest(wavelet->left, lb, rb, k);
 
 	return wavelet_kth_smallest(wavelet->right, l - lb, r - rb,
 				    k - in_left);
@@ -167,16 +167,16 @@ u32 wavelet_kth_smallest(const WaveletTree *const wavelet, const size_t l,
 u32 wavelet_leq(const WaveletTree *const wavelet, const size_t l,
 		const size_t r, const u32 k)
 {
-	if (l > r || wavelet->low > k)
+	if (l >= r || wavelet->low > k)
 		return 0;
 
 	if (wavelet->high <= k)
-		return r - l + 1;
+		return r - l;
 
 	const u32 lb = wavelet->data[l];
-	const u32 rb = wavelet->data[r + 1];
+	const u32 rb = wavelet->data[r];
 
-	return wavelet_leq(wavelet->left, lb, rb - 1, k) +
+	return wavelet_leq(wavelet->left, lb, rb, k) +
 	       wavelet_leq(wavelet->right, l - lb, r - rb, k);
 }
 
