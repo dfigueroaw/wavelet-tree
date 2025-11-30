@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(GCC_LIKE $<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>)
 
-add_library(wavelet-tree src/wavelet.c)
+add_library(wavelet-tree src/wavelet.c src/file.c src/compressor.c)
 target_link_libraries(wavelet-tree PUBLIC m)
 target_include_directories(wavelet-tree PUBLIC include)
 
