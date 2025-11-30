@@ -1,4 +1,5 @@
 #include "wavelet.h"
+#include "file.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,6 +93,29 @@ WaveletTree *wavelet_from_string(const char *const restrict str)
 
 	WaveletTree *const wavelet = wavelet_from_vec(vals, n);
 	free(vals);
+
+	return wavelet;
+}
+
+WaveletTree *wavelet_from_file(const char *const restrict path,
+			       size_t *const out_size)
+{
+	char *buf = read_file(path, out_size);
+	if (!buf)
+		return NULL;
+
+	u32 *const restrict vals = calloc(*out_size, sizeof(*vals));
+	if (!vals) {
+		free(buf);
+		return NULL;
+	}
+
+	for (size_t i = 0; i < *out_size; ++i)
+		vals[i] = (u32)(unsigned char)buf[i];
+
+	WaveletTree *const wavelet = wavelet_from_vec(vals, *out_size);
+	free(vals);
+	free(buf);
 
 	return wavelet;
 }

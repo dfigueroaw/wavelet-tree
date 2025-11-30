@@ -10,6 +10,8 @@ WaveletTree *wavelet_from_vec(const u32 *restrict vals, size_t n);
 
 WaveletTree *wavelet_from_string(const char *restrict str);
 
+WaveletTree *wavelet_from_file(const char *restrict path, size_t *out_size);
+
 void wavelet_destroy(WaveletTree *wavelet);
 
 u32 wavelet_at(const WaveletTree *wavelet, size_t i);
