@@ -11,5 +11,6 @@ pkgs.mkShell {
     ))
     cmake
     gcc
+    valgrind
   ];
 }
