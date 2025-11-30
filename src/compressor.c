@@ -32,7 +32,7 @@ static char *make_temp_path(const char *const suffix)
 
 static size_t gzip_compress(const char *const path)
 {
-	char *out = make_temp_path(".gz");
+	char *const out = make_temp_path(".gz");
 	if (!out)
 		return 0;
 
