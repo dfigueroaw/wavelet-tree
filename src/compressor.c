@@ -52,7 +52,7 @@ static size_t gzip_compress(const char *const path)
 
 static size_t bzip2_compress(const char *const path)
 {
-	char *out = make_temp_path(".bz2");
+	char *const out = make_temp_path(".bz2");
 	if (!out)
 		return 0;
 
@@ -72,7 +72,7 @@ static size_t bzip2_compress(const char *const path)
 
 static size_t xz_compress(const char *const path)
 {
-	char *out = make_temp_path(".xz");
+	char *const out = make_temp_path(".xz");
 	if (!out)
 		return 0;
 
@@ -92,7 +92,7 @@ static size_t xz_compress(const char *const path)
 
 static size_t zstd_compress(const char *const path)
 {
-	char *out = make_temp_path(".zst");
+	char *const out = make_temp_path(".zst");
 	if (!out)
 		return 0;
 

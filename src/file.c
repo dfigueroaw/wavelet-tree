@@ -7,7 +7,7 @@ char *read_file(const char *const restrict path, size_t *const out_size)
 {
 	*out_size = 0;
 
-	FILE *f = fopen(path, "rb");
+	FILE *const f = fopen(path, "rb");
 	if (!f)
 		return NULL;
 

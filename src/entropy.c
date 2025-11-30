@@ -103,6 +103,7 @@ static void compare_compressors(const char *const restrict path)
 		}
 	}
 
+	printf("\n");
 	wavelet_destroy(wavelet);
 }
 
@@ -114,6 +115,7 @@ int main()
 	printf("\n");
 
 	printf("Escoge una opción:\n");
+	printf("0. Salir\n");
 	printf("1. String corto\n");
 	printf("2. String medio\n");
 	printf("3. String largo\n");
@@ -130,13 +132,15 @@ int main()
 			puts("error inesperado al leer selección");
 			return 1;
 		}
-	} while (choice < 1 || choice > 6);
+	} while (choice < 0 || choice > 6);
 
 	printf("\n");
 
 	const char *selected_str = NULL;
 
 	switch (choice) {
+	case 0:
+		return 0;
 	case 1:
 		selected_str = s1;
 		break;
